@@ -1,0 +1,13 @@
+﻿node_modules
+**/node_modules
+.env
+.env.*
+dist
+**/dist
+.next
+**/.next
+.turbo
+**/.turbo
+coverage
+**/coverage
+.DS_Store
