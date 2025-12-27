@@ -1,20 +1,37 @@
-import { NextResponse } from "next/server";
-import { DevAuthStore } from "../_store";
+import { Router } from "express";
 
-export async function POST(req: Request) {
-  const body = await req.json().catch(() => null);
-  const email = String(body?.email || "").trim();
-  const password = String(body?.password || "");
+const r = Router();
 
-  const res = DevAuthStore.login(email, password);
-  if (!res.ok) {
-    return NextResponse.json({ ok: false, error: res.error }, { status: 401 });
+r.post("/login", (req, res) => {
+  const email = String(req.body?.email || "").trim();
+  const password = String(req.body?.password || "").trim();
+
+  if (!email || !password) {
+    return res.status(400).json({ ok: false, error: "Vul e-mail en wachtwoord in." });
   }
 
-  const token = "dev-session-" + crypto.randomUUID();
-  return NextResponse.json({
+  let userType = "consumer";
+  const e = email.toLowerCase();
+  if (e.endsWith("@bouwapp.nl")) userType = "org_admin";
+  else if (e.endsWith("@planner.nl")) userType = "org_staff";
+  else if (e.includes("bedrijf")) userType = "business_client";
+  else if (e.includes("zzp")) userType = "zzp";
+
+  const token = Buffer.from(email).toString("base64");
+
+  res.cookie("auth_token", token, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: false,
+    path: "/",
+    maxAge: 60 * 60 * 24 * 7,
+  });
+
+  return res.json({
     ok: true,
     token,
-    user: res.user,
+    user: { email, userType },
   });
-}
+});
+
+export default r;

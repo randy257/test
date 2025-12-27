@@ -46,7 +46,7 @@ export default function ResetPasswordPage() {
       }
 
       setMsg("Wachtwoord aangepast. Je kunt nu inloggen.");
-      setTimeout(() => router.replace("/auth/login"), 700);
+      setTimeout(() => router.replace("/login"), 700);
     } finally {
       setBusy(false);
     }
@@ -65,9 +65,7 @@ export default function ResetPasswordPage() {
             <div className="flex items-start justify-between gap-4">
               <div>
                 <div className="text-xl font-semibold tracking-tight text-black">Nieuw wachtwoord</div>
-                <div className="mt-1 text-sm text-black/60">
-                  Kies een nieuw wachtwoord voor je account.
-                </div>
+                <div className="mt-1 text-sm text-black/60">Kies een nieuw wachtwoord voor je account.</div>
               </div>
 
               <div className="rounded-full bg-blue-600/10 px-3 py-1 text-xs font-semibold text-blue-700">
@@ -108,11 +106,11 @@ export default function ResetPasswordPage() {
               ) : null}
 
               <div className="flex items-center justify-between gap-3 pt-1">
-                <Link href="/auth/forgot-password" className="text-xs font-medium text-blue-600 hover:underline">
+                <Link href="/forgot-password" className="text-xs font-medium text-blue-600 hover:underline">
                   Nieuwe reset link
                 </Link>
 
-                <Link href="/auth/login" className="text-xs font-medium text-black/70 hover:underline">
+                <Link href="/login" className="text-xs font-medium text-black/70 hover:underline">
                   Terug naar inloggen
                 </Link>
               </div>

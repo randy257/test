@@ -12,6 +12,8 @@ export default function LoginPage() {
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
 
+  const canSubmit = email.trim().length > 3 && password.trim().length >= 6;
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setMsg(null);
@@ -44,6 +46,8 @@ export default function LoginPage() {
       localStorage.setItem("auth_token", data?.token || "dev");
       localStorage.setItem("auth_user", JSON.stringify(data?.user || { email: eMail }));
       router.replace("/dashboard");
+    } catch {
+      setMsg("Server niet bereikbaar. Probeer opnieuw.");
     } finally {
       setBusy(false);
     }
@@ -61,8 +65,12 @@ export default function LoginPage() {
           <div className="auth-card rounded-2xl border border-black/10 bg-white p-7">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <div className="text-xl font-semibold tracking-tight text-black">Inloggen</div>
-                <div className="mt-1 text-sm text-black/60">Gebruik je werkmail.</div>
+                <div className="text-xl font-semibold tracking-tight text-black">
+                  Inloggen
+                </div>
+                <div className="mt-1 text-sm text-black/60">
+                  Gebruik je werkmail.
+                </div>
               </div>
               <div className="rounded-full bg-blue-600/10 px-3 py-1 text-xs font-semibold text-blue-700">
                 Secure
@@ -73,23 +81,25 @@ export default function LoginPage() {
               <div>
                 <label className="text-xs font-medium text-black">E-mail</label>
                 <input
+                  required
+                  type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="mt-2 h-11 w-full rounded-xl border border-black/10 bg-white px-4 text-sm text-black outline-none transition focus:border-blue-600 focus:ring-4 focus:ring-blue-600/15"
                   placeholder="naam@email.nl"
                   autoComplete="email"
-                  inputMode="email"
                 />
               </div>
 
               <div>
                 <label className="text-xs font-medium text-black">Wachtwoord</label>
                 <input
+                  required
+                  type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="mt-2 h-11 w-full rounded-xl border border-black/10 bg-white px-4 text-sm text-black outline-none transition focus:border-blue-600 focus:ring-4 focus:ring-blue-600/15"
                   placeholder="Wachtwoord"
-                  type="password"
                   autoComplete="current-password"
                 />
               </div>
@@ -115,20 +125,13 @@ export default function LoginPage() {
               ) : null}
 
               <button
-                disabled={busy}
+                disabled={busy || !canSubmit}
                 className="flex h-11 w-full items-center justify-center rounded-xl bg-black text-sm font-semibold text-white transition hover:bg-black/90 disabled:opacity-60"
               >
                 {busy ? "Bezig..." : "Inloggen"}
               </button>
 
-              <div className="flex items-center justify-between gap-3">
-                <Link
-                  href="/verify-email"
-                  className="text-xs font-medium text-blue-600 hover:underline"
-                >
-                  E-mail verifiëren
-                </Link>
-
+              <div className="pt-1 flex justify-end">
                 <button
                   type="button"
                   onClick={() => setMsg("SSO voeg je later toe via OIDC")}
