@@ -24,3 +24,76 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+@keyframes bgShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes gridDrift {
+  0% { transform: translate3d(0,0,0); }
+  50% { transform: translate3d(-18px, 12px, 0); }
+  100% { transform: translate3d(0,0,0); }
+}
+
+.moving-panel {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(700px 460px at 18% 20%, rgba(255,212,0,0.18), transparent 55%),
+    radial-gradient(760px 520px at 82% 70%, rgba(37,99,235,0.18), transparent 55%),
+    linear-gradient(120deg, rgba(0,0,0,0.92), rgba(11,11,15,0.92));
+  background-size: 220% 220%;
+  animation: bgShift 16s ease-in-out infinite;
+}
+
+.blueprint-grid {
+  position: absolute;
+  inset: -40px;
+  opacity: 0.14;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.22) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.22) 1px, transparent 1px);
+  background-size: 34px 34px;
+  animation: gridDrift 14s ease-in-out infinite;
+}
+@keyframes screwFloat {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0.22; }
+  50% { transform: translateY(-18px) rotate(180deg); opacity: 0.45; }
+  100% { transform: translateY(0) rotate(360deg); opacity: 0.22; }
+}
+
+.screw-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.screw {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  opacity: 0.35;
+  animation: screwFloat 18s ease-in-out infinite;
+  filter: drop-shadow(0 10px 30px rgba(0,0,0,0.35));
+}
+
+.screw.blue {
+  animation-duration: 22s;
+  opacity: 0.28;
+}
+
+.screw.small {
+  width: 28px;
+  height: 28px;
+  animation-duration: 16s;
+  opacity: 0.25;
+}
+
+.screw.tiny {
+  width: 18px;
+  height: 18px;
+  animation-duration: 14s;
+  opacity: 0.18;
+}
